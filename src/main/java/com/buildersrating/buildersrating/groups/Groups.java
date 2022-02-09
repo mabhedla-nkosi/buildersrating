@@ -47,4 +47,12 @@ public class Groups {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Groups groups = (Groups) o;
+        return groupId.equals(groups.groupId) && groupName.equals(groups.groupName);
+    }
+
 }
