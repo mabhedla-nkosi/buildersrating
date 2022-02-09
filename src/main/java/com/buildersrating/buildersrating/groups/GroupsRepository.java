@@ -17,4 +17,5 @@ public interface GroupsRepository extends JpaRepository<Groups, Long> {
     boolean existsByName(@RequestBody String groupName);
 
 
+    //Groups findAllById(Long groupId);
 }

@@ -14,6 +14,13 @@ public class ApiExceptions {
     public ApiExceptions() {
     }
 
+    public ApiExceptions(String httpmessage, String httpStatus, LocalDateTime timestamp, String path) {
+        this.httpmessage = httpmessage;
+        this.httpStatus = httpStatus;
+        this.timestamp = timestamp;
+        this.path = path;
+    }
+
     public ApiExceptions(String httpmessage, String httpStatus, LocalDateTime timestamp) {
         this.httpmessage = httpmessage;
         this.httpStatus = httpStatus;
