@@ -12,24 +12,28 @@ public class Users {
     private Long userId;
     private String firstName;
     private String lastName;
+    private String password;
     private String idNumber;
     private String emailAddress;
     private String userStatus;
     private Long groupId;
+    private LocalDateTime registeredDate;
     private LocalDateTime loginDate;
     private LocalDateTime logoutDate;
 
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName, String idNumber, String emailAddress, String userStatus, Long groupId, LocalDateTime loginDate, LocalDateTime logoutDate) {
+    public Users(Long userId, String firstName, String lastName,String password, String idNumber, String emailAddress, String userStatus, Long groupId,LocalDateTime registeredDate, LocalDateTime loginDate, LocalDateTime logoutDate) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password=password;
         this.idNumber = idNumber;
         this.emailAddress = emailAddress;
         this.userStatus = userStatus;
         this.groupId = groupId;
+        this.registeredDate=registeredDate;
         this.loginDate = loginDate;
         this.logoutDate = logoutDate;
     }
@@ -56,6 +60,14 @@ public class Users {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getIdNumber() {
@@ -90,6 +102,14 @@ public class Users {
         this.groupId = groupId;
     }
 
+    public LocalDateTime getRegisteredDate() {
+        return registeredDate;
+    }
+
+    public void setRegisteredDate(LocalDateTime registeredDate) {
+        this.registeredDate = registeredDate;
+    }
+
     public LocalDateTime getLoginDate() {
         return loginDate;
     }
@@ -104,6 +124,11 @@ public class Users {
 
     public void setLogoutDate(LocalDateTime logoutDate) {
         this.logoutDate = logoutDate;
+    }
+
+    @PrePersist
+    public void onCreate() {
+        this.registeredDate =  LocalDateTime.now();
     }
 
     @Override
