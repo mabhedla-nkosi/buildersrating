@@ -7,21 +7,21 @@ import java.time.LocalDateTime;
 public class ApiExceptions {
 
     private String httpmessage;
-    private String httpStatus;
+    private HttpStatus httpStatus;
     private LocalDateTime timestamp;
     private String path;
 
     public ApiExceptions() {
     }
 
-    public ApiExceptions(String httpmessage, String httpStatus, LocalDateTime timestamp, String path) {
+    public ApiExceptions(String httpmessage, HttpStatus httpStatus, LocalDateTime timestamp, String path) {
         this.httpmessage = httpmessage;
         this.httpStatus = httpStatus;
         this.timestamp = timestamp;
         this.path = path;
     }
 
-    public ApiExceptions(String httpmessage, String httpStatus, LocalDateTime timestamp) {
+    public ApiExceptions(String httpmessage, HttpStatus httpStatus, LocalDateTime timestamp) {
         this.httpmessage = httpmessage;
         this.httpStatus = httpStatus;
         this.timestamp = timestamp;
@@ -36,11 +36,11 @@ public class ApiExceptions {
         this.httpmessage = httpmessage;
     }
 
-    public String getHttpStatus() {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
-    public void setHttpStatus(String httpStatus) {
+    public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
 
