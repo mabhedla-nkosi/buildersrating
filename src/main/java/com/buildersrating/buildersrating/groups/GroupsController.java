@@ -37,21 +37,24 @@ public class GroupsController {
         catch (Exception e){
             throw new ApiRequestException(e.getMessage());
         }
-        apiExceptions=new ApiExceptions("The group "+groups.getGroupName()+" was created.","201",LocalDateTime.now(),"api/v1/groups");
+        apiExceptions=new ApiExceptions("The group "+groups.getGroupName()
+                +" was created.",HttpStatus.CREATED,LocalDateTime.now(),"api/v1/groups/registerGroups");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiExceptions);
     }
 
     @GetMapping(path = "/list-all-groups")
     public List<Groups> viewGroups(){
-        return groupsService.getGroups();
+        try {
+            return groupsService.getGroups();
+        }catch (Exception ex){
+            throw new ApiRequestException(ex.getMessage());
+        }
     }
 
     @DeleteMapping(path="{groupId}")
-    public ResponseEntity<?> deleteGroups(@PathVariable("groupId") Long groupId){
+    public void deleteGroups(@PathVariable("groupId") Long groupId){
         try{
             groupsService.deleteGroups(groupId);
-            apiExceptions=new ApiExceptions("The group id "+groupId+" was deleted.","204",LocalDateTime.now(),"api/v1/groups");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(apiExceptions);
         }catch (IllegalArgumentException e){
             throw new ApiRequestException(e.getMessage());
         }
@@ -72,7 +75,8 @@ public class GroupsController {
         catch (Exception e){
             throw new ApiRequestException(e.getMessage());
         }
-        apiExceptions=new ApiExceptions("The group id "+groupId+" was updated.","200",LocalDateTime.now(),"api/v1/groups");
+        apiExceptions=new ApiExceptions("The group id "+groupId
+                +" was updated.",HttpStatus.OK,LocalDateTime.now(),"api/v1/groups");
         return ResponseEntity.status(HttpStatus.OK).body(apiExceptions);
     }
 
