@@ -22,7 +22,14 @@ public class GroupsService {
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     public List<Groups> getGroups(){
-        return groupsRepository.findAll();
+        try
+        {
+            return groupsRepository.findAll();
+        }catch (IllegalArgumentException e){
+            throw new ApiRequestException(e.getMessage());
+        }catch (Exception e){
+            throw new ApiRequestException(e.getMessage());
+        }
     }
 
     public void addNewGroup(Groups groups){
@@ -61,7 +68,7 @@ public class GroupsService {
         groupsVariable=groupsRepository.getById(groupId);
         if(!exists){
             throw new ApiRequestException("Group with id "+groupId+" does not exist.");
-        }else if(groupName==null && groupName.length()>0){
+        }else if(groupName==null && groupName.length()<=0){
             throw new ApiRequestException("The group name is not valid, please insert a proper name.");
         }else if(groupsVariable.getGroupName().equals(groupName)){
             throw new ApiRequestException("The group name is the same.");

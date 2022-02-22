@@ -54,11 +54,16 @@ public class UsersController {
     }
 
     @PutMapping(path = "{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable("groupId") Long userId,
-                                        @RequestParam(required = false)String firstName){
+    public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId,
+                                        @RequestParam(required = false)String firstName,
+                                        @RequestParam(required = false)String lastName,
+                                        @RequestParam(required = false)String password,
+                                        @RequestParam(required = false)String emailAddress,
+                                        @RequestParam(required = false)String userStatus,
+                                        @RequestParam(required = false)Long groupId){
 
         try{
-            usersService.updateUser(userId);
+            usersService.updateUser(userId,firstName,lastName,password,emailAddress,userStatus,groupId);
         }catch (IllegalArgumentException e){
             throw new ApiRequestException(e.getMessage());
         }
