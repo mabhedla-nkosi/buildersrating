@@ -67,7 +67,7 @@ public class UsersService {
         }
 
         try{
-            usersVariable.setFirstName(firstName);
+            usersVariable.setFirstName(firstName);//struggling here
         }catch (IllegalArgumentException e){
             throw new ApiRequestException(e.getMessage());
         }catch (Exception e){
