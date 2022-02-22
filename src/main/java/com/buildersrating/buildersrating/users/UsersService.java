@@ -67,7 +67,7 @@ public class UsersService {
         }
 
         try{
-            groupsVariable.setGroup_name(groupName);
+            usersVariable.setFirstName(firstName);
         }catch (IllegalArgumentException e){
             throw new ApiRequestException(e.getMessage());
         }catch (Exception e){
