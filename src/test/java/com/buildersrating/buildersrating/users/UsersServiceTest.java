@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -138,9 +140,10 @@ class UsersServiceTest {
     @Test
     void deleteUser() {
         //given
-        Users userTest1=new Users("Thabiso", "Ngubane","12356",
-                "9109347830893", "thabiso@gmail.com", "business man", 1L,
-                0, 0);
+        Users userTest1=new Users(1L,"Thabiso", "Ngubane","12356",
+                "9109347830893", "thabiso@gmail.com", "business man",
+                1L, LocalDateTime.now(),LocalDateTime.now(),LocalDateTime.now(),0, 0);
+
 
         //when
         userTest1.setDeleted(1);
@@ -199,5 +202,10 @@ class UsersServiceTest {
     @Test
     @Disabled
     void login() {
+        //given
+        String emailTest="thabiso@gmail.com";
+        Users userTest1=new Users("Thabiso", "Ngubane","12356",
+                "9109347830893", "thabiso@gmail.com", "business man", 1L,
+                0, 0);
     }
 }
