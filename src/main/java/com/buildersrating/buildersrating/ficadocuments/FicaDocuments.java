@@ -16,17 +16,34 @@ public class FicaDocuments {
     private LocalDateTime expiryDate;
     private Long businessId;
     private Long userId;
+    private int deleted;
+    private int suspended;
 
     public FicaDocuments() {
     }
 
-    public FicaDocuments(Long docId, Blob identityDocument, Blob proofOfAddress, LocalDateTime expiryDate, Long businessId, Long userId) {
+    public FicaDocuments(Long docId, Blob identityDocument, Blob proofOfAddress, LocalDateTime expiryDate, Long businessId, Long userId,
+                         int deleted, int suspended) {
         this.docId = docId;
         this.identityDocument = identityDocument;
         this.proofOfAddress = proofOfAddress;
         this.expiryDate = expiryDate;
         this.businessId = businessId;
         this.userId = userId;
+        this.deleted=deleted;
+        this.suspended=suspended;
+    }
+
+    public FicaDocuments(Blob identityDocument, Blob proofOfAddress, LocalDateTime expiryDate,
+                         Long businessId, Long userId, int deleted, int suspended) {
+        this.docId = docId;
+        this.identityDocument = identityDocument;
+        this.proofOfAddress = proofOfAddress;
+        this.expiryDate = expiryDate;
+        this.businessId = businessId;
+        this.userId = userId;
+        this.deleted=deleted;
+        this.suspended=suspended;
     }
 
     public Long getDocId() {
@@ -77,6 +94,22 @@ public class FicaDocuments {
         this.userId = userId;
     }
 
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
+    public int getSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(int suspended) {
+        this.suspended = suspended;
+    }
+
     @Override
     public String toString() {
         return "FicaDocuments{" +
@@ -86,6 +119,8 @@ public class FicaDocuments {
                 ", expiryDate=" + expiryDate +
                 ", businessId=" + businessId +
                 ", userId=" + userId +
+                ", deleted=" + deleted +
+                ", suspended=" + suspended +
                 '}';
     }
 }

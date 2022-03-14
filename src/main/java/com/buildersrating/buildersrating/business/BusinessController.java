@@ -15,74 +15,64 @@ import java.util.List;
 @RequestMapping(path = "api/v1/business")
 public class BusinessController {
 
-    @Autowired
-    BusinessService businessService;
+    private BusinessService businessService;
+
+    public BusinessController(BusinessService businessService) {
+        this.businessService = businessService;
+    }
 
     ApiExceptions apiExceptions;
 
-    @GetMapping(path = "/get-all-business")
-    public List<Business> viewBusiness(){
-        try{
-            return businessService.getBusiness();
-        }catch (Exception ex){
-            throw new ApiRequestException(ex.getMessage());
-        }
+    @GetMapping(path = "/getAllActiveBusiness")
+    public List<Business> viewActiveBusiness(){
+        return businessService.getAllActiveBusiness();
+    }
+
+    @GetMapping(path = "/getAllInactiveBusiness")
+    public List<Business> viewInactiveBusiness(){
+        return businessService.getAllInactiveBusiness();
+    }
+
+    @GetMapping(path = "/getAllDeletedBusiness")
+    public List<Business> viewDeletedBusiness(){
+        return businessService.getAllDeletedBusiness();
+    }
+
+    @GetMapping(path = "/getAllSuspendedBusiness")
+    public List<Business> viewSuspendedBusiness(){
+        return businessService.getAllSuspendedBusiness();
     }
 
     @PostMapping(path = "/registerBusiness")
     public ResponseEntity<?> registerBusiness(@RequestBody Business business){
-        if(business.getBusinessName().length()<3){
-            throw new ApiRequestException("The business name is too short. Please enter a proper name.");
-        }else if(business.getbAddress().length()<3){
-            throw new ApiRequestException("The address is too short. Please enter a proper address.");
-        }else if(business.getbRegNumber().length()<3){
-            throw new ApiRequestException("The registration number is incorrect.");
-        }
-
-        try{
-            businessService.addNewBusiness(business);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+        businessService.addNewBusiness(business);
 
         apiExceptions=new ApiExceptions("The business "+business.getBusinessName()+" and the registration number "+business.getbRegNumber()
-                +" was created.", HttpStatus.CREATED, LocalDateTime.now(),"api/v1/users/registerBusiness");
+                +" was created.", HttpStatus.CREATED, LocalDateTime.now(),"api/v1/business/registerBusiness");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiExceptions);
     }
 
-    @DeleteMapping(path="{businessId}")
+    @DeleteMapping(path="/deleteBusiness/{businessId}")
     public void deleteBusiness(@PathVariable("businessId") Long businessId){
-        try{
-            businessService.deleteBusiness(businessId);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+        businessService.deleteBusiness(businessId);
     }
 
-    @PutMapping(path = "{businessId}")
-    public ResponseEntity<?> updateUser(@PathVariable("businessId") Long businessId,
-                                        @RequestParam(required = false)String businessName,
-                                        @RequestParam(required = false)int bType,
-                                        @RequestParam(required = false)String bRegNumber,
-                                        @RequestParam(required = false)String bAddress,
-                                        @RequestParam(required = false)String approvalStatus){
+    @PostMapping(path = "/suspendBusiness/{businessId}")
+    public void suspendBusiness(@PathVariable("businessId") Long businessId){
+        businessService.suspendBusiness(businessId);
+    }
 
-        try{
-            businessService.updateBusiness(businessId,businessName,bType,bRegNumber,bAddress,approvalStatus);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+    @PostMapping(path = "/restoreBusiness/{businessId}")
+    public void restoreBusiness(@PathVariable("businessId")Long businessId){
+        businessService.restoreBusiness(businessId);
+    }
+
+    @PutMapping(path = "/updateBusiness/{businessId}")
+    public ResponseEntity<?> updateUser(@PathVariable("businessId") Long businessId,Business business){
+
+        businessService.updateBusiness(businessId,business);
         apiExceptions=new ApiExceptions("The business id "+businessId
-                +" was updated.",HttpStatus.OK,LocalDateTime.now(),"api/v1/business");
+                +" was updated.",HttpStatus.OK,LocalDateTime.now(),"api/v1/business/updateBusiness");
         return ResponseEntity.status(HttpStatus.OK).body(apiExceptions);
     }
 

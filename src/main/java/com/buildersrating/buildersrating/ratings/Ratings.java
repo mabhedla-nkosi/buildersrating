@@ -13,16 +13,31 @@ public class Ratings {
     private String reviewComment;
     private Long userId;
     private Long businessId;
+    private int deleted;
+    private int suspended;
 
     public Ratings() {
     }
 
-    public Ratings(Long ratingId, int ratingNumber, String reviewComment, Long userId, Long businessId) {
+    public Ratings(Long ratingId, int ratingNumber, String reviewComment, Long userId, Long businessId,
+                   int deleted, int suspended) {
         this.ratingId = ratingId;
         this.ratingNumber = ratingNumber;
         this.reviewComment = reviewComment;
         this.userId = userId;
         this.businessId = businessId;
+        this.deleted=deleted;
+        this.suspended=suspended;
+    }
+
+    public Ratings(int ratingNumber, String reviewComment, Long userId, Long businessId,
+                   int deleted, int suspended) {
+        this.ratingNumber = ratingNumber;
+        this.reviewComment = reviewComment;
+        this.userId = userId;
+        this.businessId = businessId;
+        this.deleted=deleted;
+        this.suspended=suspended;
     }
 
     public Long getRatingId() {
@@ -65,6 +80,22 @@ public class Ratings {
         this.businessId = businessId;
     }
 
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
+    public int getSuspendRating() {
+        return suspended;
+    }
+
+    public void setSuspended(int suspended) {
+        this.suspended = suspended;
+    }
+
     @Override
     public String toString() {
         return "Ratings{" +
@@ -73,6 +104,8 @@ public class Ratings {
                 ", reviewComment='" + reviewComment + '\'' +
                 ", userId=" + userId +
                 ", businessId=" + businessId +
+                ", deleted=" + deleted +
+                ", suspended=" + suspended +
                 '}';
     }
 }

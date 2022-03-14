@@ -10,8 +10,10 @@ import java.util.List;
 @Service
 public class FicaDocumentsService {
 
-    @Autowired
-    FicaDocumentsRepository ficaDocumentsRepository;
+    private FicaDocumentsRepository ficaDocumentsRepository;
+    public FicaDocumentsService(FicaDocumentsRepository ficaDocumentsRepository) {
+        this.ficaDocumentsRepository = ficaDocumentsRepository;
+    }
 
     public List<FicaDocuments> getFicaDocuments() {
         try{

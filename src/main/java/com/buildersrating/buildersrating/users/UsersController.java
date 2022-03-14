@@ -10,80 +10,92 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/v1/users")
 public class UsersController {
 
-    @Autowired
-    UsersService usersService;
+    private UsersService usersService;
+    public UsersController(UsersService usersService) {
+        this.usersService = usersService;
+    }
 
     ApiExceptions apiExceptions;
 
-    @GetMapping(path = "/get-all-users")
-    public List<Users> viewUsers(){
-        try{
-            return usersService.getUsers();
-        }catch (Exception ex){
-            throw new ApiRequestException(ex.getMessage());
-        }
+    @GetMapping(path = "/getAllActiveUsers")
+    public List<Users> viewActiveUsers(){
+        return usersService.getActiveUsers();
+    }
+
+    @GetMapping(path = "/getAllInactiveUsers")
+    public List<Users> viewInactiveUsers(){
+        return usersService.getInactiveUsers();
+    }
+
+    @GetMapping(path = "/getAllDeletedUsers")
+    public List<Users> viewDeletedUsers(){
+        return usersService.getDeletedUsers();
+    }
+
+    @GetMapping(path = "/getAllSuspendedUsers")
+    public List<Users> viewSuspendedUsers(){
+        return usersService.getSuspendedUsers();
+    }
+
+    @GetMapping(path = "/listUser/{userId}")
+    public Optional<Users> getUserById(@PathVariable("userId") Long userId) {
+        return usersService.findUserById(userId);
+    }
+
+    @PostMapping("/users/login")
+    public ResponseEntity<Users> login(@RequestBody Users users) throws Exception {
+        return ResponseEntity.ok().body(usersService.login(users));
     }
 
     @PostMapping(path = "/registerUsers")
     public ResponseEntity<?> registerUser(@RequestBody Users users){
-        if(users.getFirstName().length()<3){
-            throw new ApiRequestException("The name is too short. Please enter a proper name.");
-        }else if(users.getLastName().length()<3){
-            throw new ApiRequestException("The name is too short. Please enter a proper name.");
-        }else if(users.getIdNumber().length()<13||users.getIdNumber().length()>13){
-            throw new ApiRequestException("The ID number is incorrect. Please enter 13 digits");
-        }
-
-        try{
-            usersService.addNewUser(users);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+        usersService.addNewUser(users);
 
         apiExceptions=new ApiExceptions("The user "+users.getFirstName()+" "+users.getLastName()
                 +" was created.", HttpStatus.CREATED, LocalDateTime.now(),"api/v1/users/registerUsers");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiExceptions);
     }
 
-    @PutMapping(path = "{userId}")
+    @PutMapping(path = "/updateUser/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable("userId") Long userId,
-                                        @RequestParam(required = false)String firstName,
-                                        @RequestParam(required = false)String lastName,
-                                        @RequestParam(required = false)String password,
-                                        @RequestParam(required = false)String emailAddress,
-                                        @RequestParam(required = false)String userStatus,
-                                        @RequestParam(required = false)Long groupId){
+                                        @RequestBody Users user){
+        usersService.updateUser(userId,user);
 
-        try{
-            usersService.updateUser(userId,firstName,lastName,password,emailAddress,userStatus,groupId);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
         apiExceptions=new ApiExceptions("The user id "+userId
-                +" was updated.",HttpStatus.OK,LocalDateTime.now(),"api/v1/users");
+                +" was updated.",HttpStatus.OK,LocalDateTime.now(),"api/v1/users/updateUser");
         return ResponseEntity.status(HttpStatus.OK).body(apiExceptions);
     }
 
-    @DeleteMapping(path = "{userId}")
+    @PutMapping(path = "/updateEmailAddress")
+    public ResponseEntity<?> updateEmailAddress(@RequestBody String oldEmailAddress,
+                                                @RequestBody String newEmailAddress){
+        usersService.changeEmailAddress(oldEmailAddress,newEmailAddress);
+
+        apiExceptions=new ApiExceptions("Email address "+oldEmailAddress
+                +" was updated to "+newEmailAddress,HttpStatus.OK,LocalDateTime.now(),"api/v1/users/updateEmailAddress");
+        return ResponseEntity.status(HttpStatus.OK).body(apiExceptions);
+    }
+
+    @DeleteMapping(path = "/deleteUser/{userId}")
     public void deleteUser(@PathVariable("userId") Long userId){
-        try{
-            usersService.deleteUser(userId);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+        usersService.deleteUser(userId);
+    }
+
+    @PostMapping(path = "/suspendUser/{userId}")
+    public ResponseEntity<?> suspendUser(@PathVariable("userId") Long userId){
+        usersService.suspendUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body("The user has been suspended.");
+    }
+
+    @PostMapping(path = "/restoreUser/{userId}")
+    public ResponseEntity<?> restoreUser(@PathVariable("userId") Long userId){
+        usersService.restoreUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body("The user has been restored.");
     }
 }

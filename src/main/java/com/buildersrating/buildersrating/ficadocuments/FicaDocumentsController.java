@@ -15,8 +15,10 @@ import java.util.List;
 @RequestMapping(path = "api/v1/fica-documents")
 public class FicaDocumentsController {
 
-    @Autowired
-    FicaDocumentsService ficaDocumentsService;
+    private FicaDocumentsService ficaDocumentsService;
+    public FicaDocumentsController(FicaDocumentsService ficaDocumentsService) {
+        this.ficaDocumentsService = ficaDocumentsService;
+    }
 
     ApiExceptions apiExceptions;
 

@@ -2,6 +2,7 @@ package com.buildersrating.buildersrating.groups;
 
 import com.buildersrating.buildersrating.exceptions.ApiExceptions;
 import com.buildersrating.buildersrating.exceptions.ApiRequestException;
+import com.buildersrating.buildersrating.users.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hibernate.query.criteria.internal.ValueHandlerFactory.isNumeric;
 
@@ -17,64 +19,65 @@ import static org.hibernate.query.criteria.internal.ValueHandlerFactory.isNumeri
 @RequestMapping(path = "api/v1/groups")
 public class GroupsController {
 
-    @Autowired
-    GroupsService groupsService;
+    private GroupsService groupsService;
+    public GroupsController(GroupsService groupsService) {
+        this.groupsService = groupsService;
+    }
 
     ApiExceptions apiExceptions;
 
-    @PostMapping(path = "/registerGroups")
-    public ResponseEntity<?> registerNewGroup(@RequestBody Groups groups){
-        if(groups.getGroupName().isEmpty()){
-            throw new ApiRequestException("There is no value.");
-        }else if(groups.getGroupName().length()<3){ //not a correct validation
-            throw new ApiRequestException("You can't enter a number.");
-        }
-        try{
-            groupsService.addNewGroup(groups);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+    @PostMapping(path = "/registerGroup")
+    public ResponseEntity<?> createNewGroup(@RequestBody Groups groups){
+        groupsService.addNewGroup(groups);
         apiExceptions=new ApiExceptions("The group "+groups.getGroupName()
                 +" was created.",HttpStatus.CREATED,LocalDateTime.now(),"api/v1/groups/registerGroups");
         return ResponseEntity.status(HttpStatus.CREATED).body(apiExceptions);
     }
 
-    @GetMapping(path = "/list-all-groups")
-    public List<Groups> viewGroups(){
-        try {
-            return groupsService.getGroups();
-        }catch (Exception ex){
-            throw new ApiRequestException(ex.getMessage());
-        }
+    @GetMapping(path = "/listAllActiveGroups")
+    public List<Groups> viewActiveGroups(){
+        return groupsService.getActiveGroups();
     }
 
-    @DeleteMapping(path="{groupId}")
-    public void deleteGroups(@PathVariable("groupId") Long groupId){
-        try{
-            groupsService.deleteGroups(groupId);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+    @GetMapping(path = "/listAllInactiveGroups")
+    public List<Groups> viewInactiveGroups(){
+        return groupsService.getInactiveGroups();
     }
 
-    @PutMapping(path = "{groupId}")
+    @GetMapping(path = "/listDeletedGroups")
+    public List<Groups> viewDeletedGroups(){
+        return groupsService.getDeletedGroups();
+    }
+
+    @GetMapping(path = "/listGroups/{groupId}")
+    public Optional<Groups> getGroupById(@PathVariable("groupId") Long groupId) {
+        return groupsService.findGroupById(groupId);
+    }
+
+    @GetMapping(path = "/listSuspendedGroups")
+    public List<Groups> viewSuspendedGroups(){
+        return groupsService.getSuspendedGroups();
+    }
+
+    @DeleteMapping(path="/deleteGroup/{groupId}")
+    public void deleteGroup(@PathVariable("groupId") Long groupId){
+        groupsService.deleteGroups(groupId);
+    }
+
+    @PostMapping(path = "suspendGroup/{groupId}")
+    public void suspendGroup(@PathVariable("groupId") Long groupId){
+        groupsService.suspendGroup(groupId);
+    }
+
+    @PostMapping(path = "restore/{groupId}")
+    public void restoreGroup(@PathVariable("groupId") Long groupId){
+        groupsService.restoreGroup(groupId);
+    }
+
+    @PutMapping(path = "/updateGroup/{groupId}")
     public ResponseEntity<?> updateGroups(@PathVariable("groupId") Long groupId,
-                                          @RequestParam(required = false)String groupName){
-
-        try{
-            groupsService.updateGroups(groupId,groupName);
-        }catch (IllegalArgumentException e){
-            throw new ApiRequestException(e.getMessage());
-        }
-        catch (Exception e){
-            throw new ApiRequestException(e.getMessage());
-        }
+                                          @RequestBody Groups groups){
+        groupsService.updateGroups(groupId,groups);
         apiExceptions=new ApiExceptions("The group id "+groupId
                 +" was updated.",HttpStatus.OK,LocalDateTime.now(),"api/v1/groups");
         return ResponseEntity.status(HttpStatus.OK).body(apiExceptions);

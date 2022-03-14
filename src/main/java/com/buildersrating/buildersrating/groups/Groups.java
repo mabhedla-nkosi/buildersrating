@@ -10,13 +10,23 @@ public class Groups {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId;
     private String groupName;
+    private int deleted;
+    private int suspended;
 
     public Groups() {
     }
 
-    public Groups(Long groupId, String groupName) {
+    public Groups(Long groupId, String groupName, int deleted, int suspended) {
         this.groupId = groupId;
         this.groupName = groupName;
+        this.deleted=deleted;
+        this.suspended=suspended;
+    }
+
+    public Groups(String groupName, int deleted, int suspended) {
+        this.groupName = groupName;
+        this.deleted=deleted;
+        this.suspended=suspended;
     }
 
     public Groups(String groupName) {
@@ -35,8 +45,24 @@ public class Groups {
         return groupName;
     }
 
-    public void setGroup_name(String groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
+    public int getSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(int suspended) {
+        this.suspended = suspended;
     }
 
     @Override
@@ -44,6 +70,8 @@ public class Groups {
         return "Groups{" +
                 "groupId=" + groupId +
                 ", groupName='" + groupName + '\'' +
+                ", deleted=" + deleted +
+                ", suspended=" + suspended +
                 '}';
     }
 

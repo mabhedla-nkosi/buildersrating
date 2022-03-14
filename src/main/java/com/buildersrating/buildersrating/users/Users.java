@@ -20,11 +20,16 @@ public class Users {
     private LocalDateTime registeredDate;
     private LocalDateTime loginDate;
     private LocalDateTime logoutDate;
+    private int suspended;
+    private int deleted;
 
     public Users() {
     }
 
-    public Users(Long userId, String firstName, String lastName,String password, String idNumber, String emailAddress, String userStatus, Long groupId,LocalDateTime registeredDate, LocalDateTime loginDate, LocalDateTime logoutDate) {
+    public Users(Long userId, String firstName, String lastName,String password,
+                 String idNumber, String emailAddress, String userStatus, Long groupId,
+                 LocalDateTime registeredDate, LocalDateTime loginDate, LocalDateTime logoutDate,
+                 int suspended, int deleted) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,6 +41,22 @@ public class Users {
         this.registeredDate=registeredDate;
         this.loginDate = loginDate;
         this.logoutDate = logoutDate;
+        this.suspended=suspended;
+        this.deleted=deleted;
+    }
+
+    public Users(String firstName, String lastName,String password,
+                 String idNumber, String emailAddress, String userStatus, Long groupId,
+                 int suspended, int deleted) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password=password;
+        this.idNumber = idNumber;
+        this.emailAddress = emailAddress;
+        this.userStatus = userStatus;
+        this.groupId = groupId;
+        this.suspended=suspended;
+        this.deleted=deleted;
     }
 
     public Long getUserId() {
@@ -126,6 +147,22 @@ public class Users {
         this.logoutDate = logoutDate;
     }
 
+    public int getSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(int suspended) {
+        this.suspended = suspended;
+    }
+
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
     @PrePersist
     public void onCreate() {
         this.registeredDate =  LocalDateTime.now();
@@ -137,12 +174,16 @@ public class Users {
                 "userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", password='" + password + '\'' +
                 ", idNumber='" + idNumber + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", userStatus='" + userStatus + '\'' +
                 ", groupId=" + groupId +
+                ", registeredDate=" + registeredDate +
                 ", loginDate=" + loginDate +
                 ", logoutDate=" + logoutDate +
+                ", suspended=" + suspended +
+                ", deleted=" + deleted +
                 '}';
     }
 }

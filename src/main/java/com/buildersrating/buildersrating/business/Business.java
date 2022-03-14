@@ -17,11 +17,14 @@ public class Business {
     private String approvalStatus;
     private LocalDateTime decisionDate;
     private int userId;
+    private int deleted;
+    private int suspended;
 
     public Business() {
     }
 
-    public Business(Long businessId, String businessName, int bType, String bRegNumber, String bAddress, String approvalStatus, LocalDateTime decisionDate, int userId) {
+    public Business(Long businessId, String businessName, int bType, String bRegNumber, String bAddress,
+                    String approvalStatus, LocalDateTime decisionDate, int userId, int deleted, int suspended) {
         this.businessId = businessId;
         this.businessName = businessName;
         this.bType = bType;
@@ -30,6 +33,22 @@ public class Business {
         this.approvalStatus = approvalStatus;
         this.decisionDate = decisionDate;
         this.userId = userId;
+        this.deleted=deleted;
+        this.suspended=suspended;
+    }
+
+    public Business(String businessName, int bType, String bRegNumber, String bAddress,
+                    String approvalStatus, LocalDateTime decisionDate, int userId, int deleted, int suspended) {
+        this.businessId = businessId;
+        this.businessName = businessName;
+        this.bType = bType;
+        this.bRegNumber = bRegNumber;
+        this.bAddress = bAddress;
+        this.approvalStatus = approvalStatus;
+        this.decisionDate = decisionDate;
+        this.userId = userId;
+        this.deleted=deleted;
+        this.suspended=suspended;
     }
 
     public Long getBusinessId() {
@@ -96,6 +115,22 @@ public class Business {
         this.userId = userId;
     }
 
+    public int getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(int deleted) {
+        this.deleted = deleted;
+    }
+
+    public int getSuspended() {
+        return suspended;
+    }
+
+    public void setSuspended(int suspended) {
+        this.suspended = suspended;
+    }
+
     @Override
     public String toString() {
         return "Business{" +
@@ -107,6 +142,8 @@ public class Business {
                 ", approvalStatus='" + approvalStatus + '\'' +
                 ", decisionDate=" + decisionDate +
                 ", userId=" + userId +
+                ", deleted=" + deleted +
+                ", suspended=" + suspended +
                 '}';
     }
 }
